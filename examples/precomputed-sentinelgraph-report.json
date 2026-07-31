@@ -1,0 +1,38 @@
+{
+  "agent": "SentinelGraph: An Autonomous Data Security Agent for DataHub",
+  "datasetUrn": "urn:li:dataset:(urn:li:dataPlatform:postgres,customer_orders,PROD)",
+  "datasetName": "customer_orders",
+  "domain": "Finance",
+  "securityScore": 72,
+  "threatLevel": "high",
+  "riskTrend": "stable",
+  "aiSummary": "SentinelGraph is an AI agent that autonomously monitors DataHub for security risks. For customer_orders in Finance, it assigned a high threat level with score 72 after reasoning over PII tags, customer schema fields, ownership, assertions, and downstream lineage. Its lineage analysis found a blast radius of 2 downstream assets and recommends tightening PII controls before publishing further revenue extracts.",
+  "findings": [
+    {
+      "category": "PII exposure",
+      "severity": "high",
+      "description": "Dataset contains customer_email and billing_zip fields tagged as PII and feeds downstream finance reporting.",
+      "recommendation": "Apply DataHub classification review, access policy validation, and masking recommendations for downstream assets."
+    },
+    {
+      "category": "Lineage blast radius",
+      "severity": "medium",
+      "description": "Two downstream assets depend on this dataset, including an executive dashboard.",
+      "recommendation": "Notify owners and add a DataHub assertion recommendation for PII-safe publication."
+    }
+  ],
+  "lineageImpact": {
+    "blastRadius": 2,
+    "downstreamAssets": ["finance_revenue", "Revenue Executive Dashboard"]
+  },
+  "dataHubWrites": {
+    "customProperties": {
+      "securityScore": "72",
+      "threatLevel": "high",
+      "riskTrend": "stable",
+      "aiSummary": "SentinelGraph is an AI agent that autonomously monitors DataHub for security risks.",
+      "remediationStatus": "open",
+      "lastScanVersion": "sentinelgraph-v1"
+    }
+  }
+}

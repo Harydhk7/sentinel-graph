@@ -1,0 +1,24 @@
+services:
+  sentinelgraph:
+    build:
+      context: .
+      dockerfile: Dockerfile.sentinelgraph
+    networks:
+      - default
+      - datahub
+    environment:
+      DATAHUB_BASE_URL: ${DATAHUB_BASE_URL:-http://datahub-gms:8080}
+      DATAHUB_GMS_URL: ${DATAHUB_GMS_URL:-http://datahub-gms:8080}
+      DATAHUB_GRAPHQL_URL: ${DATAHUB_GRAPHQL_URL:-http://datahub-gms:8080/api/graphql}
+      DATAHUB_REST_URL: ${DATAHUB_REST_URL:-http://datahub-gms:8080/api/v2/entities}
+      SENTINELGRAPH_PUBLISH: ${SENTINELGRAPH_PUBLISH:-true}
+      SENTINELGRAPH_OUTPUT: /tmp/sentinelgraph-out
+    volumes:
+      - ./sentinelgraph-out:/tmp/sentinelgraph-out
+    entrypoint: ["python", "sentinelgraph.py", "analyze", "--dataset", "urn:li:dataset:(urn:li:dataPlatform:postgres,customer_orders,PROD)", "--publish", "--output", "/tmp/sentinelgraph-out"]
+
+networks:
+  default:
+  datahub:
+    external: true
+    name: datahub_network

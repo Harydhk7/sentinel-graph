@@ -1,0 +1,33 @@
+{
+  "dataset": {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,customer_orders,PROD)",
+    "name": "customer_orders",
+    "platform": "postgres",
+    "description": "Customer order facts used by finance and revenue reporting.",
+    "schema": [
+      {"name": "order_id", "type": "string"},
+      {"name": "customer_email", "type": "string"},
+      {"name": "billing_zip", "type": "string"},
+      {"name": "order_total", "type": "decimal"}
+    ],
+    "owners": [{"name": "Data Platform", "email": "platform@example.com"}],
+    "tags": [{"name": "pii"}, {"name": "critical"}],
+    "glossaryTerms": [{"name": "Customer Data"}],
+    "assertions": [{"name": "Not Null"}, {"name": "Freshness SLA"}],
+    "domains": [{"name": "Finance"}],
+    "storageLocations": [{"location": "s3://warehouse/orders"}],
+    "pipelines": [{"name": "orders_etl"}],
+    "mlAssets": [{"name": "orders_score"}]
+  },
+  "lineage": {
+    "nodes": [
+      {"urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,customer_orders,PROD)", "type": "dataset", "name": "customer_orders"},
+      {"urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance_revenue,PROD)", "type": "dataset", "name": "finance_revenue"},
+      {"urn": "urn:li:dashboard:(looker,revenue_exec_dashboard)", "type": "dashboard", "name": "Revenue Executive Dashboard"}
+    ],
+    "edges": [
+      {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,customer_orders,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance_revenue,PROD)"},
+      {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance_revenue,PROD)", "target": "urn:li:dashboard:(looker,revenue_exec_dashboard)"}
+    ]
+  }
+}
